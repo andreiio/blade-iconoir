@@ -1,0 +1,59 @@
+name: Update
+
+on:
+  schedule:
+    - cron: "0 12 * * *"
+
+jobs:
+  update:
+    name: Update icons
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: current-version
+        name: Get current version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: .version
+
+      - id: latest-version
+        name: Get latest version
+        uses: pozetroninc/github-action-get-latest-release@v0.5.0
+        with:
+          repository: lucaburgio/iconoir
+
+      - id: new-version
+        name: Compare versions
+        run: |
+          echo "Current version: ${{ steps.current-version.outputs.content }}"
+          echo "Latest version: ${{ steps.latest-version.outputs.release }}"
+
+          if [ "${{ steps.current-version.outputs.content }}" != "${{ steps.latest-version.outputs.release }}" ]; then
+              echo ::set-output name=exists::true
+          fi
+
+      - name: Download iconoir
+        if: steps.new-version.outputs.exists
+        run: |
+          curl -sSL https://github.com/lucaburgio/iconoir/archive/refs/tags/${{ steps.latest-version.outputs.release }}.zip -o iconoir.zip
+          unzip -jo iconoir.zip 'iconoir-*/icons/*.svg' -d resources/svg
+          rm iconoir.zip
+
+      - name: Update .version
+        if: steps.new-version.outputs.exists
+        run: echo ${{ steps.latest-version.outputs.release }} > .version
+
+      - name: Create pull request
+        if: steps.new-version.outputs.exists
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: "chore: update to iconoir ${{ steps.latest-version.outputs.release }}"
+          title: "chore: update to iconoir ${{ steps.latest-version.outputs.release }}"
+          branch: chore/update-${{ steps.latest-version.outputs.release }}
+          body: |
+            This PR updates iconoir from [${{ steps.current-version.outputs.content }}](https://github.com/lucaburgio/iconoir/releases/tag/${{ steps.current-version.outputs.content }}) to [${{ steps.latest-version.outputs.release }}](https://github.com/lucaburgio/iconoir/releases/tag/${{ steps.latest-version.outputs.release }}).
+
+            Check out the differences: [`${{ steps.current-version.outputs.content }}` ... `${{ steps.latest-version.outputs.release }}`](https://github.com/lucaburgio/iconoir/compare/${{ steps.current-version.outputs.content }}...${{ steps.latest-version.outputs.release }})
