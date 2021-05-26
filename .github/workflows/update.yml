@@ -19,6 +19,7 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: ./.version
+          trim: true
 
       - id: latest-version
         name: Get latest version
