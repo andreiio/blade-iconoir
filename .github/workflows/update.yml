@@ -17,7 +17,7 @@ jobs:
         name: Get current version
         uses: juliangruber/read-file-action@v1
         with:
-          path: .version
+          path: ./.version
 
       - id: latest-version
         name: Get latest version
@@ -44,7 +44,7 @@ jobs:
 
       - name: Update .version
         if: steps.new-version.outputs.exists
-        run: echo ${{ steps.latest-version.outputs.release }} > .version
+        run: echo ${{ steps.latest-version.outputs.release }} > ./.version
 
       - name: Create pull request
         if: steps.new-version.outputs.exists
