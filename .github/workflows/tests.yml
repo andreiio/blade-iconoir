@@ -15,11 +15,9 @@ jobs:
         php:
           - "7.4"
           - "8.0"
-        dependency-version:
-          - prefer-lowest
-          - prefer-stable
+          - "8.1"
 
-    name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -30,12 +28,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: fileinfo
+          extensions: dom, curl, fileinfo, libxml, mbstring, zip
           coverage: pcov
-          tools: composer:v2
 
       - name: Install PHP dependencies
-        run: composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --ansi
+        run: composer update --no-interaction --no-progress --ansi
 
       - name: Unit Tests
         run: composer test
