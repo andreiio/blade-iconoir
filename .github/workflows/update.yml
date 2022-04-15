@@ -41,6 +41,7 @@ jobs:
         if: steps.new-version.outputs.exists
         run: |
           curl -sSL https://github.com/lucaburgio/iconoir/archive/refs/tags/${{ steps.latest-version.outputs.release }}.zip -o iconoir.zip
+          rm resources/svg/*.svg
           unzip -jo iconoir.zip 'iconoir-*/icons/*.svg' -d resources/svg
           rm iconoir.zip
 
