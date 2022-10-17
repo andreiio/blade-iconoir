@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - id: current-version
         name: Get current version
@@ -23,7 +23,7 @@ jobs:
 
       - id: latest-version
         name: Get latest version
-        uses: pozetroninc/github-action-get-latest-release@v0.5.0
+        uses: pozetroninc/github-action-get-latest-release@v0.6.0
         with:
           repository: lucaburgio/iconoir
 
@@ -51,7 +51,7 @@ jobs:
 
       - name: Create pull request
         if: steps.new-version.outputs.exists
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           commit-message: "chore: update to iconoir ${{ steps.latest-version.outputs.release }}"
           title: "chore: update to iconoir ${{ steps.latest-version.outputs.release }}"
