@@ -23,7 +23,7 @@ jobs:
 
       - id: latest-version
         name: Get latest version
-        uses: pozetroninc/github-action-get-latest-release@v0.6.0
+        uses: pozetroninc/github-action-get-latest-release@v0.7.0
         with:
           repository: lucaburgio/iconoir
 
