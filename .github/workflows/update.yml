@@ -5,6 +5,9 @@ on:
     - cron: "0 12 * * *"
   workflow_dispatch:
 
+env:
+  repository: iconoir-icons/iconoir
+
 jobs:
   update:
     name: Update icons
@@ -25,7 +28,8 @@ jobs:
         name: Get latest version
         uses: pozetroninc/github-action-get-latest-release@v0.7.0
         with:
-          repository: lucaburgio/iconoir
+          repository: ${{ env.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - id: new-version
         name: Compare versions
@@ -40,7 +44,7 @@ jobs:
       - name: Download iconoir
         if: steps.new-version.outputs.exists
         run: |
-          curl -sSL https://github.com/lucaburgio/iconoir/archive/refs/tags/${{ steps.latest-version.outputs.release }}.zip -o iconoir.zip
+          curl -sSL https://github.com/${{ env.repository }}/archive/refs/tags/${{ steps.latest-version.outputs.release }}.zip -o iconoir.zip
           rm resources/svg/*.svg
           unzip -jo iconoir.zip 'iconoir-*/icons/*.svg' -d resources/svg
           rm iconoir.zip
@@ -57,6 +61,6 @@ jobs:
           title: "chore: update to iconoir ${{ steps.latest-version.outputs.release }}"
           branch: chore/update-${{ steps.latest-version.outputs.release }}
           body: |
-            This PR updates iconoir from [${{ steps.current-version.outputs.content }}](https://github.com/lucaburgio/iconoir/releases/tag/${{ steps.current-version.outputs.content }}) to [${{ steps.latest-version.outputs.release }}](https://github.com/lucaburgio/iconoir/releases/tag/${{ steps.latest-version.outputs.release }}).
+            This PR updates iconoir from [${{ steps.current-version.outputs.content }}](https://github.com/${{ env.repository }}/releases/tag/${{ steps.current-version.outputs.content }}) to [${{ steps.latest-version.outputs.release }}](https://github.com/${{ env.repository }}/releases/tag/${{ steps.latest-version.outputs.release }}).
 
-            Check out the differences: [`${{ steps.current-version.outputs.content }}` ... `${{ steps.latest-version.outputs.release }}`](https://github.com/lucaburgio/iconoir/compare/${{ steps.current-version.outputs.content }}...${{ steps.latest-version.outputs.release }})
+            Check out the differences: [`${{ steps.current-version.outputs.content }}` ... `${{ steps.latest-version.outputs.release }}`](https://github.com/${{ env.repository }}/compare/${{ steps.current-version.outputs.content }}...${{ steps.latest-version.outputs.release }})
