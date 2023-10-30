@@ -46,7 +46,7 @@ jobs:
         run: |
           curl -sSL https://github.com/${{ env.repository }}/archive/refs/tags/${{ steps.latest-version.outputs.release }}.tar.gz -o iconoir.tar.gz
           rm resources/svg/*.svg
-          tar -C resources/svg --strip-components=2 -zxvf iconoir.tar.gz 'iconoir-*/icons/**/*.svg'
+          tar -C resources/svg --strip-components=2 --wildcards -zxvf iconoir.tar.gz 'iconoir-*/icons/**/*.svg'
           rm iconoir.tar.gz
 
       - name: Update .version
