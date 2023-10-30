@@ -44,10 +44,10 @@ jobs:
       - name: Download iconoir
         if: steps.new-version.outputs.exists
         run: |
-          curl -sSL https://github.com/${{ env.repository }}/archive/refs/tags/${{ steps.latest-version.outputs.release }}.zip -o iconoir.zip
+          curl -sSL https://github.com/${{ env.repository }}/archive/refs/tags/${{ steps.latest-version.outputs.release }}.tar.gz -o iconoir.tar.gz
           rm resources/svg/*.svg
-          unzip -jo iconoir.zip 'iconoir-*/icons/*.svg' -d resources/svg
-          rm iconoir.zip
+          tar -C resources/svg --strip-components=2 -zxvf iconoir.tar.gz 'iconoir-*/icons/**/*.svg'
+          rm iconoir.tar.gz
 
       - name: Update .version
         if: steps.new-version.outputs.exists
