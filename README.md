@@ -29,17 +29,17 @@ composer require andreiio/blade-iconoir
 
 Icons can be used a self-closing Blade components which will be compiled to SVG icons:
 ```blade
-<x-iconoir-bookmark-empty />
+<x-iconoir-regular-bookmark />
 ```
 
 You can also pass classes to your icon components:
 ```blade
-<x-iconoir-mail class="w-6 h-6 text-gray-500 fill-current" />
+<x-iconoir-regular-mail class="w-6 h-6 text-gray-500 fill-current" />
 ```
 
 And even use inline styles:
 ```blade
-<x-iconoir-warning-triangle-outline style="fill: #F00" />
+<x-iconoir-solid-warning-triangle style="fill: #F00" />
 ```
 
 ### Raw SVG Icons
@@ -53,7 +53,7 @@ php artisan vendor:publish --tag=blade-iconoir --force
 Then use them in your views like:
 
 ```blade
-<img src="{{ asset('vendor/blade-iconoir/bicycle.svg') }}" width="10" height="10"/>
+<img src="{{ asset('vendor/blade-iconoir/regular-bicycle.svg') }}" width="10" height="10"/>
 ```
 
 ### Blade Icons
