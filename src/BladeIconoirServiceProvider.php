@@ -13,7 +13,7 @@ class BladeIconoirServiceProvider extends ServiceProvider
     {
         $this->callAfterResolving(Factory::class, function (Factory $factory) {
             $factory->add('iconoir', [
-                'path'   => __DIR__ . '/../resources/svg',
+                'path' => __DIR__ . '/../resources/svg',
                 'prefix' => 'iconoir',
             ]);
         });
