@@ -52,6 +52,7 @@ jobs:
 
           # Extract the new icon directories in resources/svg
           tar -C resources/svg \
+            --wildcards \
             --strip-components=2 \
             -zxf iconoir.tar.gz \
             'iconoir-*/icons/**/*.svg'
