@@ -44,15 +44,30 @@ jobs:
       - name: Download iconoir
         if: steps.new-version.outputs.exists
         run: |
+          # Download the latest version of iconoir
           curl -sSL https://github.com/${{ env.repository }}/archive/refs/tags/${{ steps.latest-version.outputs.release }}.tar.gz -o iconoir.tar.gz
-          rm resources/svg/*.svg
+
+          # Remove existing icons
+          rm -rf resources/svg/*
+
+          # Extract the new icon directories in resources/svg
           tar -C resources/svg \
-            --wildcards \
-            --show-transformed-names \
-            --transform 's,[^/]*/[^/]*/\([^/]*\)/\([^/]*\),\L\1-\2,' \
-            -zxvf iconoir.tar.gz \
+            --strip-components=2 \
+            -zxf iconoir.tar.gz \
             'iconoir-*/icons/**/*.svg'
+
+          # Move the regular icons to resources/svg
+          mv -v resources/svg/regular/*.svg resources/svg
+
+          # Add the "-solid" suffix to the solid icons and move them to resources/svg
+          for file in resources/svg/solid/*.svg; do
+            mv -v "$file" "resources/svg/$(basename "$file" .svg)-solid.svg"
+          done
+
+          # Clean up
           rm iconoir.tar.gz
+          rmdir resources/svg/regular
+          rmdir resources/svg/solid
 
       - name: Update .version
         if: steps.new-version.outputs.exists
