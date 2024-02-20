@@ -41,6 +41,9 @@ And even use inline styles:
 ```blade
 <x-iconoir-solid-warning-triangle style="fill: #F00" />
 ```
+### Icon Naming Convention
+
+Please be aware, that this package uses a different naming convention for the "Style" of the icons than the [original icon author's website](https://iconoir.com/docs/naming-convention##:~:text=Styles). All regular styled icon names are prefixed with 'regular-', as all solid styled icon names are prefixed with '-solid'.
 
 ### Raw SVG Icons
 
