@@ -6,6 +6,10 @@ on:
 
 jobs:
   tests:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     strategy:
       matrix:
         os:
@@ -13,14 +17,11 @@ jobs:
           - macos-latest
           - windows-latest
         php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
           - "8.2"
           - "8.3"
-
-    name: PHP ${{ matrix.php }} - ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+          - "8.4"
+          - "8.5"
+          - "8.6"
 
     steps:
       - name: Checkout
