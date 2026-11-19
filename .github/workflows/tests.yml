@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
+    env:
+      extensions: dom, curl, fileinfo, libxml, mbstring, zip
+
     strategy:
       matrix:
         os:
@@ -27,11 +30,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          key: php-extensions-cache
+
+      - name: Cache extensions
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, fileinfo, libxml, mbstring, zip
+          extensions: ${{ env.extensions }}
           coverage: pcov
 
       - name: Install PHP dependencies
